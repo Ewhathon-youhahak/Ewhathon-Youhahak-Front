@@ -73,6 +73,9 @@ const closeButtonStyle = {
 };
 
 export const SignUp = () => {
+
+  const navigate = useNavigate(); // useNavigate 호출하여 navigate 함수를 생성
+
   // 입력된 값들을 상태로 관리
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -87,7 +90,7 @@ export const SignUp = () => {
   const handleSignUp = () => {
     // 회원가입 처리
     // axios를 사용하여 POST 요청
-    axios.post('/api/signup', { email, password, nickname })
+    axios.post(`${process.env.REACT_APP_BACKEND_URL}/signup`, { email, password, nickname })
       .then(response => {
         // 성공 처리 로직
         alert('회원가입이 완료되었습니다.');

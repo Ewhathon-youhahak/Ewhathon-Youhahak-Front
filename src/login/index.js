@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
@@ -65,7 +65,7 @@ export const Login = () => {
   // 로그인 함수
   const handleLogin = () => {
     // axios를 사용하여 로그인 요청
-    axios.post('/api/login', { email, password })
+    axios.post(`${process.env.REACT_APP_BACKEND_URL}/login`, { email, password })
       .then(response => {
         // 여기서 JWT 토큰을 받아 로컬 스토리지에 저장하는 등의 로직을 추가할 수 있습니다.
         // 예: localStorage.setItem('token', response.data.token);
