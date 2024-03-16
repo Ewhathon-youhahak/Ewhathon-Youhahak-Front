@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom'; // react-router-dom을 사용하여 라우팅
+import axios from 'axios'; // axios import 추가
+
 
 // 예시 데이터, 실제로는 데이터베이스에서 가져온 데이터를 사용해야 함
 const documents = [
@@ -58,24 +60,28 @@ const linkStyle = {
 function DocumentList() {
 
     const navigate = useNavigate();
+    const [documents, setDocuments] = useState(initialDocuments); // 문서 목록 상태
 
     // 문서 수정 페이지로 이동하는 함수
-    const handleEdit = (docId) => {
-        navigate(`/edit-document/${docId}`); // 여기에 지정한 경로를 사용하세요
+    const handleEdit = (note_id) => {
+        navigate(`/api/notes/${note_id}`); // 여기에 지정한 경로를 사용하세요
     };
 
     // 문서 삭제 로직을 처리하는 함수
     const handleDelete = async (docId) => {
-        try {
-        // DELETE 요청을 보낼 서버의 엔드포인트를 지정해야 합니다.
-        // 여기에는 예시로 클라이언트 측 로그만 표시합니다.
-        // 실제로는 서버로 요청을 보내는 코드를 작성해야 합니다.
-        // 예: await axios.delete(`/api/documents/${docId}`);
-        console.log(`Deleting document ${docId}`);
-        // 요청 후 상태 업데이트나 페이지 리로드가 필요할 수 있습니다.
-        } catch (error) {
-        console.error('Failed to delete the document:', error);
-        }
+      try {
+        const response = await axios.delete(`/api/notes/${docId}`);
+        console.log('Delete response:', response.data);
+        alert('문서가 성공적으로 삭제되었습니다.');
+  
+        // 삭제된 항목을 UI에서 제거
+        const updatedDocuments = documents.filter(doc => doc.id !== docId);
+        setDocuments(updatedDocuments); // 상태 업데이트
+  
+      } catch (error) {
+        console.error('문서 삭제에 실패했습니다:', error);
+        alert('문서를 삭제하는 데 실패했습니다.');
+      }
     };
 
   return (
