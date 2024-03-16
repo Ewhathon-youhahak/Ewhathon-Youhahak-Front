@@ -1,20 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom'; // react-router-dom을 사용하여 라우팅
 import axios from 'axios'; // axios import 추가
 
-
-// 예시 데이터, 실제로는 데이터베이스에서 가져온 데이터를 사용해야 함
-const documents = [
-  {
-    id: 'doc1',
-    userId: 'boobu',
-    title: '서비스 경영 2주차 전사노트',
-    subject: '서비스 경영',
-    professor: '이종호 교수님',
-    date: '2024년 3월 2일'
-  },
-  // 더 많은 문서 객체...
-];
 
 // 스타일 객체에 버튼 관련 스타일 추가
 const buttonStyle = {
@@ -60,24 +47,50 @@ const linkStyle = {
 function DocumentList() {
 
     const navigate = useNavigate();
-    const [documents, setDocuments] = useState(initialDocuments); // 문서 목록 상태
+    const [documentList, setDocumentList] = useState([]); // 문서 목록 상태
+
+    
+    useEffect(() => {
+      const fetchDocuments = async () => {
+        try {
+          // API 요청을 보내고 응답 데이터를 상태로 설정, 요청 헤더에 JWT 토큰 포함
+          const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/notes/student`, {
+            headers: {
+              'Authorization': `${localStorage.getItem('token')}`
+            }
+          });
+          console.log('response :', response); // 여기에서 응답 값을 콘솔에 출력
+          setDocumentList(response.data); // 데이터를 상태로 설정
+        } catch (error) {
+          console.error('문서 목록을 불러오는 데 실패했습니다:', error);
+        }
+      };
+    
+      fetchDocuments(); // 함수 호출
+    }, []);
+    
+
+
 
     // 문서 수정 페이지로 이동하는 함수
     const handleEdit = (note_id) => {
-        navigate(`/api/notes/${note_id}`); // 여기에 지정한 경로를 사용하세요
+        navigate(`${process.env.REACT_APP_BACKEND_URL}/notes/${note_id}`); // 여기에 지정한 경로를 사용하세요
     };
 
     // 문서 삭제 로직을 처리하는 함수
-    const handleDelete = async (docId) => {
+    const handleDelete = async (note_id) => {
       try {
-        const response = await axios.delete(`/api/notes/${docId}`);
-        console.log('Delete response:', response.data);
+        await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/notes/${note_id}`, {
+          headers: {
+            'Authorization': `${localStorage.getItem('token')}`
+          }
+        });
         alert('문서가 성공적으로 삭제되었습니다.');
-  
+    
         // 삭제된 항목을 UI에서 제거
-        const updatedDocuments = documents.filter(doc => doc.id !== docId);
-        setDocuments(updatedDocuments); // 상태 업데이트
-  
+        const updatedDocumentList = documentList.filter(doc => doc.id !== note_id);
+        setDocumentList(updatedDocumentList); // 상태 업데이트
+    
       } catch (error) {
         console.error('문서 삭제에 실패했습니다:', error);
         alert('문서를 삭제하는 데 실패했습니다.');
@@ -86,7 +99,7 @@ function DocumentList() {
 
   return (
     <div>
-      {documents.map((doc) => (
+      {documentList.map((doc) => (
         <div key={doc.id}  style={documentStyle}>
             <div>
                 <div style={userIdStyle}>{doc.userId}</div>
