@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom'; 
 
 const signUpStyle = {
   display: 'flex',
@@ -71,18 +73,58 @@ const closeButtonStyle = {
 };
 
 export const SignUp = () => {
-  // 회원가입 로직을 여기에 작성하세요.
+  // 입력된 값들을 상태로 관리
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [nickname, setNickname] = useState('');
+
+  // 입력 변경 핸들러
+  const handleEmailChange = (e) => setEmail(e.target.value);
+  const handlePasswordChange = (e) => setPassword(e.target.value);
+  const handleNicknameChange = (e) => setNickname(e.target.value);
+
+
   const handleSignUp = () => {
     // 회원가입 처리
+    // axios를 사용하여 POST 요청
+    axios.post('/api/signup', { email, password, nickname })
+      .then(response => {
+        // 성공 처리 로직
+        alert('회원가입이 완료되었습니다.');
+        // 로그인 페이지로 리다이렉트
+        navigate('/login'); 
+
+      })
+      .catch(error => {
+        // 에러 처리 로직
+        // 예: 에러 메시지 표시
+        console.error('회원가입 에러', error);
+        alert('회원가입 중 문제가 발생했습니다.');
+      });
   };
 
   return (
     <div style={signUpStyle}>
       <div style={cardStyle}>
         <div style={textStyle}>회원가입하기</div>
-        <input type="text" placeholder="닉네임" style={inputStyle} />
-        <input type="email" placeholder="이메일 주소" style={inputStyle} />
-        <input type="password" placeholder="비밀번호" style={inputStyle} />
+        <input 
+          type="text" 
+          placeholder="닉네임" 
+          value={nickname} 
+          onChange={handleNicknameChange} 
+          style={inputStyle} />
+        <input 
+          type="email" 
+          placeholder="이메일 주소" 
+          value={email} 
+          onChange={handleEmailChange} 
+          style={inputStyle} />
+        <input 
+          type="password" 
+          placeholder="비밀번호" 
+          value={password} 
+          onChange={handlePasswordChange} 
+          style={inputStyle} />
         <button style={buttonStyle} onClick={handleSignUp}>회원가입하기</button>
       </div>
     </div>
