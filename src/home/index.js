@@ -6,6 +6,9 @@ import DocumentList from './documentList';
 export const Home = () => {
     return (
         <div style={containerStyle}>
+
+            <img src={`${process.env.PUBLIC_URL}/logo_notegather.png`} alt="NoteGather Logo" style={{ width: '150px', margin: '20px 0' }} />
+            
             <RadioButtonAndSearch />
             <div style={documentListContainerStyle}>
                 <DocumentList />
