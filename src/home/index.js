@@ -11,12 +11,23 @@ function RadioButtonAndSearch(props) {
     const handleCategoryChange = (event) => setCategory(event.target.value);
     const handleQueryChange = (event) => setQuery(event.target.value);
 
-    const handleSearch = (event) => {
-        event.preventDefault();
-        const searchType = category === 'subject' ? 'lecture' : 'professor';
-        axios.get(`${process.env.REACT_APP_BACKEND_URL}/notes?searchType=${searchType}&searchTerm=${query}`)
-            .then(response => props.onSearch(response.data))
-            .catch(error => console.error('Search failed:', error));
+    const handleSearch = async (event) => {
+
+        try {
+            event.preventDefault();
+            const searchType = category == 'subject' ? 'lecture' : 'professor';
+
+            const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/notes?searchType=${searchType}&searchTerm=${query}`, {
+                headers: {
+                    'Authorization': `${localStorage.getItem('token')}`
+                }
+            });
+
+            props.onSearch(response.data);
+
+        } catch (error) {
+            console.log('실패!', error);
+        }
     };
 
     return (
@@ -67,7 +78,7 @@ function DocumentList({ documents }) {
     const viewDocument = async (docId) => {
 
         try {
-            console.log("여기까지 왔다!");
+            // console.log("여기까지 왔다!");
             // `localStorage.getItem('token')`을 사용하여 토큰을 헤더에 포함시킵니다.
             const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/notes/${docId}`, {
                 headers: {
