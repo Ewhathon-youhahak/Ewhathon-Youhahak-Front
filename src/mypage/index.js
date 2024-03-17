@@ -62,27 +62,7 @@ const profileNameStyle = {
 export const Mypage = () => {
   const [profile, setProfile] = useState({ imageUrl: '', nickname: '' });
 
-  // useEffect(() => {
-  //   // 데이터베이스로부터 사용자 프로필을 로드하는 함수를 가정합니다.
-  //   // 실제로는 여기서 API 호출을 통해 데이터를 가져올 것입니다.
-  //   const fetchProfile = async () => {
-  //     try {
-  //       // 예시로 가정된 데이터입니다. 실제 API 응답을 사용해야 합니다.
-  //       const profileData = {
-  //         imageUrl: 'https://upload.wikimedia.org/wikipedia/ko/thumb/4/4a/%EC%8B%A0%EC%A7%B1%EA%B5%AC.png/230px-%EC%8B%A0%EC%A7%B1%EA%B5%AC.png', // 실제 이미지 URL을 사용해야 합니다.
-  //         nickname: 'ssu22',
-  //       };
-  //       setProfile(profileData);
-  //     } catch (error) {
-  //       console.error('Fetching profile failed:', error);
-  //     }
-  //   };
-
-  //   fetchProfile();
-  // }, []);
-
-
-
+  
   useEffect(() => {
     const fetchProfile = async () => {
       try {

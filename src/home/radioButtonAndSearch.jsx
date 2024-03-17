@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import axios from 'axios'; 
 
-function RadioButtonAndSearch() {
+function RadioButtonAndSearch(props) {
     // 선택된 카테고리 (과목명 또는 교수명)를 상태로 관리합니다.
     const [category, setCategory] = useState('subject'); // 'subject' 또는 'professor'
     // 검색어를 상태로 관리합니다.
@@ -14,11 +15,27 @@ function RadioButtonAndSearch() {
         setQuery(event.target.value);
     };
 
+    // const handleSearch = (event) => {
+    //     event.preventDefault();
+    //     console.log(`Searching for ${category}: ${query}`);
+    //     // 검색 로직을 여기에 추가합니다. 예: API 호출 등
+    // };
+
     const handleSearch = (event) => {
         event.preventDefault();
         console.log(`Searching for ${category}: ${query}`);
-        // 검색 로직을 여기에 추가합니다. 예: API 호출 등
+        // 선택된 카테고리에 따라 searchType 설정
+        const searchType = category === 'subject' ? 'lecture' : 'professor';
+        // API 호출
+        axios.get(`${process.env.REACT_APP_BACKEND_URL}/notes?searchType=${searchType}&searchTerm=${query}`)
+            .then(response => {
+                props.onSearch(response.data);
+            })
+            .catch(error => {
+                console.error('Search failed:', error);
+            });
     };
+    
 
     // 인라인 스타일 정의
     const searchInputStyle = {

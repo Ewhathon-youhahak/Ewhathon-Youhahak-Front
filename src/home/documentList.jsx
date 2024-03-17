@@ -1,18 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom'; // react-router-dom을 사용하여 라우팅
 
-// 예시 데이터, 실제로는 데이터베이스에서 가져온 데이터를 사용해야 함
-const documents = [
-  {
-    id: 'doc1',
-    userId: 'boobu',
-    title: '서비스 경영 2주차 전사노트',
-    subject: '서비스 경영',
-    professor: '이종호 교수님',
-    date: '2024년 3월 2일'
-  },
-  // 더 많은 문서 객체...
-];
+// // 예시 데이터, 실제로는 데이터베이스에서 가져온 데이터를 사용해야 함
+// const documents = [
+//   {
+//     id: 'doc1',
+//     userId: 'boobu',
+//     title: '서비스 경영 2주차 전사노트',
+//     subject: '서비스 경영',
+//     professor: '이종호 교수님',
+//     date: '2024년 3월 2일'
+//   },
+//   // 더 많은 문서 객체...
+// ];
 
 // 스타일 객체 정의
 const documentStyle = {
@@ -39,7 +39,7 @@ const documentStyle = {
     color: '#35AE92',
     };
 
-function DocumentList() {
+function DocumentList({ documents }) {
   return (
     <div>
       {documents.map((doc) => (
